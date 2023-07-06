@@ -209,7 +209,7 @@ export default async function generateExecutiveReport() {
 
   instance.events.onPageEnd = () => { };
 
-  await instance.render([TOC]);
+  await instance.render([TOC()]);
 
   printPage(shadow.innerHTML);
   // document.body.removeChild(el);
