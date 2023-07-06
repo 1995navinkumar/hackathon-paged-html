@@ -99,8 +99,8 @@ function renderChart(canvas, chartData) {
       options: {
         ...chartData.options,
         animation: {
-          onComplete : res
-        }
+          onComplete: res,
+        },
       },
     });
   });

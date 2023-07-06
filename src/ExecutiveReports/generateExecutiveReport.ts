@@ -149,6 +149,8 @@ function setPrint() {
 function printPage(srcDoc) {
   const hideFrame = document.createElement('iframe');
   hideFrame.onload = setPrint;
+  // hideFrame.style.height = '100vh';
+  // hideFrame.style.width = '100vw';
   hideFrame.style.position = 'fixed';
   hideFrame.style.right = '0';
   hideFrame.style.bottom = '0';
