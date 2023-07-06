@@ -197,7 +197,7 @@ export default async function generateExecutiveReport() {
   ]);
 
   printPage(shadow.innerHTML);
-  document.body.removeChild(el);
+  // document.body.removeChild(el);
 }
 // In order to print just the report contents, we would need a new document. Hence used Iframe.
 // window.print will print entire page which is not needed.
