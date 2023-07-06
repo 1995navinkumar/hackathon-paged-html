@@ -1,3 +1,5 @@
+import { colors, graphColorMap } from "../constants";
+
 export function payoutLinksTransformer(apiData) {
   const defaultHeader = (column) => column.label;
 
@@ -42,19 +44,39 @@ export function payoutLinksTransformer(apiData) {
         {
           label: 'Payout Amount',
           data: apiData.map((item) => item.amount),
-          backgroundColor: 'rgba(54, 162, 235, 0.5)',
+          backgroundColor: colors,
           borderColor: 'rgba(54, 162, 235, 1)',
           borderWidth: 1,
         },
       ],
     },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
+    options : {
+      plugins : {
+        legend : {
+          display : false,
         },
+        datalabels : {
+          anchor : 'end',
+          align : 'top',
+          color : "hsla(229, 10%, 60%, 1)",
+          font : {
+            size : '14px'
+          }
+        }
       },
-    },
+      scales : {
+        x : {
+          grid : {
+            color : 'hsla(230, 23%, 29%, 1)'
+          },
+        },
+        y : {
+          grid : {
+            color : 'hsla(230, 23%, 29%, 1)'
+          }
+        }
+      }
+    }
   };
 
   function countPaymentsPerDay(data) {
@@ -78,19 +100,40 @@ export function payoutLinksTransformer(apiData) {
         {
           label: 'Number of Payments',
           data: countPaymentsPerDay(apiData),
-          backgroundColor: 'rgba(75, 192, 192, 0.5)',
-          borderColor: 'rgba(75, 192, 192, 1)',
-          borderWidth: 1,
+          backgroundColor: graphColorMap.A,
+          borderColor: graphColorMap.A,
+          borderWidth: 2,
         },
       ],
     },
     options: {
-      scales: {
-        y: {
+      plugins : {
+        legend : {
+          display : false,
+        },
+        datalabels : {
+          anchor : 'end',
+          align : 'top',
+          color : "hsla(229, 10%, 60%, 1)",
+          font : {
+            size : '14px'
+          }
+        }
+      },
+      scales : {
+        x : {
+          grid : {
+            color : 'hsla(230, 23%, 29%, 1)'
+          }
+        },
+        y : {
+          grid : {
+            color : 'hsla(230, 23%, 29%, 1)'
+          },
           beginAtZero: true,
           precision: 0,
-        },
-      },
+        }
+      }
     },
   };
 
