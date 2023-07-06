@@ -3,11 +3,11 @@ import { bladeTokens } from "./blade-tokens";
 export const styles = `
     ${bladeTokens}
 
-  /*
-    body {
+    #pdf-root, body {
         background : var(--colors-surface-background-level1-low-contrast);
+        color : var(--colors-brand-gray-500-high-contrast);
     }
-  */
+  
 
     a {
         all: unset;
@@ -17,34 +17,32 @@ export const styles = `
         font-family: Arial, Helvetica, sans-serif;
         border-collapse: collapse;
         width: 100%;
+        margin-top: 24px;
     }
 
-    td,
+    td {
+        border-right : 1px solid var(--colors-brand-gray-500-high-contrast);
+        padding : 8px;
+    }
+
     th {
-        border: 1px solid #ddd;
+        border-right : 1px solid var(--colors-brand-gray-500-high-contrast);
+        border-bottom : 1px solid var(--colors-brand-gray-500-high-contrast);
         padding: 8px;
-    }
-
-    tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
-
-    tr:hover {
-        background-color: #ddd;
     }
 
     th {
         padding-top: 12px;
         padding-bottom: 12px;
         text-align: left;
-        background-color: #04aa6d;
-        color: white;
+        // background-color: #04aa6d;
+        // color: white;
     }
 
     .section {
         font-size: 24px;
         font-weight: bold;
-        color: gray;
+        // color: gray;
         opacity: 0.9;
         margin-top: 24px;
         margin-bottom: 4px;
@@ -59,7 +57,7 @@ export const styles = `
     .toc-section {
         display: flex;
         font-size: 22px;
-        color: gray;
+        // color: gray;
         /* font-weight: bold; */
         padding: 8px 0px;
         cursor: pointer;
@@ -75,7 +73,7 @@ export const styles = `
 
     .toc-title {
         font-size: 24px;
-        color: gray;
+        // color: gray;
         font-weight: bold;
         padding: 8px 0px;
     }
