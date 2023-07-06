@@ -1,6 +1,6 @@
 import PagedHTML, { components, utils } from 'paged-html';
 import { fetchQuarterlyReportData } from '../fetchQuarterlyReport';
-import { pdfChart } from './components';
+import { countCard, pdfChart } from './components';
 import {
   vendorPaymentsTransformer,
   taxPaymentsTransformer,
@@ -13,7 +13,7 @@ const { Table, Section, TOC } = components;
 
 export default async function generateExecutiveReport() {
   const el = utils.htmlToElement(
-    `<div id="pdf-container" style="height:1px; overflow:scroll;"> 
+    `<div id="pdf-container"> 
 
     </div>`,
   );
@@ -67,6 +67,13 @@ export default async function generateExecutiveReport() {
     displayName: 'Vendor Payments',
     templates: [
       Section({
+        name: 'groupByStatus',
+        displayName: 'Vendor Payments Summary',
+        templates: [
+          countCard({data : vpData.groupByStatus})
+        ],
+      }),
+      Section({
         name: 'Top10VendorPayments',
         displayName: 'Top 10 Vendor Payments',
         templates: [
@@ -77,6 +84,7 @@ export default async function generateExecutiveReport() {
       }),
       Section({
         name: 'Vendor_Payments_by_Months',
+        threshold : 300,
         displayName: 'Vendor Payments by Months',
         templates: [
           pdfChart({
@@ -101,7 +109,7 @@ export default async function generateExecutiveReport() {
     ],
   });
 
-  await instance.render([vendorPaymentSection, TaxSection, TOC]);
+  await instance.render([vendorPaymentSection, TaxSection]);
 
   printPage(shadow.innerHTML);
   document.body.removeChild(el);

@@ -1,9 +1,12 @@
 export function vendorPaymentsTransformer(apiData) {
   const topVendorPayments = getTopVendorPayments(apiData);
   const monthVsAmount = getMonthVsAmount(apiData);
+  const groupByStatus = getGroupByStatus(apiData);
+  
   return {
     vpTable: topVendorPayments,
     vpChart: monthVsAmount,
+    groupByStatus
   };
 }
 
@@ -52,7 +55,7 @@ function getTopVendorPayments(data) {
     {
       name: 'created_at',
       header: defaultHeader,
-      cell: (column, row) => dateFormatter.format(row[column.name]),
+      cell: (column, row) => dateFormatter.format(row[column.name] * 1000),
     },
     {
       name: 'vendor',
@@ -62,7 +65,7 @@ function getTopVendorPayments(data) {
     {
       name: 'total_amount',
       header: defaultHeader,
-      cell: defaultCell,
+      cell: (column, row) => row.total_amount / 100,
     },
   ];
 
@@ -72,4 +75,16 @@ function getTopVendorPayments(data) {
     columns,
     rows,
   };
+}
+
+function getGroupByStatus(data){
+  return data.reduce((a,c) => {
+    const key = c.status;
+    if(key in a) {
+      a[key] += 1;
+    } else {
+      a[key] = 1;
+    }
+    return a;
+  },{});  
 }

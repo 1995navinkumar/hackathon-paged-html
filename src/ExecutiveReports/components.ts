@@ -2,6 +2,36 @@ import Chart from 'chart.js/auto';
 import { utils } from 'paged-html';
 import { PagedComponent, PagedeComponentCreator, PagedHTMLInstance } from 'paged-html/build/types';
 
+
+export function countCard({ data = {} }){
+  return function render(pagedInstance: PagedHTMLInstance): PagedComponent {
+    const entries = Object.entries(data);
+    async function* renderer() {
+      const countContainer = utils.htmlToElement(`
+        <div class="count-card-container">
+          ${
+            entries
+              .map(entry => `
+                  <div class="count-card">
+                    <span class="count-value">${entry[1]}</span>
+                    <span class="count-label">${entry[0]}</span>
+                  </div>
+              `)
+              .join("")
+          }
+        </div>
+      `);
+      const contentArea = pagedInstance.getCurrentPage().contentArea;
+      contentArea.appendChild(countContainer);
+      yield countContainer;
+    }
+
+    return {
+      renderer,
+    };
+  };
+}
+
 export function pdfChart({
   chartData,
   height = 500,
