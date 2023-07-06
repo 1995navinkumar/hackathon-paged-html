@@ -124,9 +124,10 @@ export default async function generateExecutiveReport() {
       }),
       Section({
         name: 'TDS',
-        displayName: 'TDS',
+        threshold: 500,
+        displayName: 'TDS Payments by Months',
         templates: [
-          pdfChart({
+          pdfChart({         
             chartData: taxData.taxChart,
             height: "350px",
             width: "100%",

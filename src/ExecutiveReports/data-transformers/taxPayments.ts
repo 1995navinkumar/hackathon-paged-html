@@ -84,7 +84,6 @@ function getTaxData(data){
       labels: tdsCategoryData.map(d=>d.category),
       datasets: [
         {
-          label: 'TDS Category',
           data: tdsCategoryData.map(d=>d.total_amount),
           backgroundColor: 'rgba(255, 99, 132, 0.2)',
         },
@@ -93,12 +92,9 @@ function getTaxData(data){
     options: {
       responsive: true,
       plugins: {
-        title: {
-          display: false,
-        },
-        legend: {
-          position: "right",
-        },
+        legend:{
+         display:false
+        }
       },
     },
   };
