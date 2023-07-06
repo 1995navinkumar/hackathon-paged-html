@@ -1,6 +1,6 @@
 import PagedHTML, { components, utils } from 'paged-html';
 import { fetchQuarterlyReportData } from '../fetchQuarterlyReport';
-import { pdfChart } from './components';
+import { countCard, pdfChart } from './components';
 import {
   vendorPaymentsTransformer,
   taxPaymentsTransformer,
@@ -13,7 +13,7 @@ const { Table, Section, TOC } = components;
 
 export default async function generateExecutiveReport() {
   const el = utils.htmlToElement(
-    `<div id="pdf-container" style="height: 1px; overflow : scroll;"> 
+    `<div id="pdf-container"> 
 
     </div>`,
   );
@@ -23,7 +23,7 @@ export default async function generateExecutiveReport() {
 
   shadow.appendChild(
     utils.htmlToElement(`
-      <div>
+      <div id="pdf-root">
           <style>${styles}</style>
       </div>
     `),
@@ -67,7 +67,29 @@ export default async function generateExecutiveReport() {
     displayName: 'Vendor Payments',
     templates: [
       Section({
+        name: 'groupByStatus',
+        displayName: 'Vendor Payments Summary',
+        templates: [
+          countCard({data : vpData.groupByStatus})
+        ],
+      }),
+      Section({
+        name: 'amountByContacts',
+        threshold : 500,
+        displayName: 'Payments by contact',
+        templates: [
+          pdfChart({
+            name: 'vp_contacts',
+            chartData: vpData.amountByContacts,
+            threshold : 500,
+            height: "400px",
+            width: "400px",
+          }),
+        ],
+      }),
+      Section({
         name: 'Top10VendorPayments',
+        threshold : 300,
         displayName: 'Top 10 Vendor Payments',
         templates: [
           Table({
@@ -77,12 +99,15 @@ export default async function generateExecutiveReport() {
       }),
       Section({
         name: 'Vendor_Payments_by_Months',
+        threshold : 500,
         displayName: 'Vendor Payments by Months',
         templates: [
           pdfChart({
+            name : 'vp_month',
             chartData: vpData.vpChart,
-            height: 350,
-            width: 500,
+            threshold : 500,
+            height: "400px",
+            width: "100%",
           }),
         ],
       }),
@@ -104,7 +129,7 @@ export default async function generateExecutiveReport() {
   await instance.render([vendorPaymentSection, TaxSection, TOC]);
 
   printPage(shadow.innerHTML);
-  document.body.removeChild(el);
+  // document.body.removeChild(el);
 }
 // In order to print just the report contents, we would need a new document. Hence used Iframe.
 // window.print will print entire page which is not needed.
