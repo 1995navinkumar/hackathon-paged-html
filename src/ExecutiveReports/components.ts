@@ -1,6 +1,6 @@
-import Chart from 'chart.js/auto';
-import { utils } from 'paged-html';
-import { PagedComponent, PagedeComponentCreator, PagedHTMLInstance } from 'paged-html/build/types';
+import Chart from "chart.js/auto";
+import { utils } from "paged-html";
+import { PagedComponent, PagedeComponentCreator, PagedHTMLInstance } from "paged-html/build/types";
 
 export function pdfChart({
   chartData,
@@ -29,7 +29,7 @@ export function pdfChart({
       const pageContent = pagedInstance.getCurrentPage().contentArea;
       pageContent.appendChild(chartEl);
 
-      const canvasEl = chartEl.querySelector('canvas');
+      const canvasEl = chartEl.querySelector("canvas");
 
       await renderChart(canvasEl, chartData);
 
@@ -38,7 +38,7 @@ export function pdfChart({
       pageContent.removeChild(chartEl);
 
       const imageEl = utils.htmlToElement(
-        `<img src=${imageUri} style="height : ${height}; width : ${width}"/>`,
+        `<img src=${imageUri} style="height : ${height}; width : ${width}"/>`
       );
 
       pageContent.appendChild(imageEl);
@@ -58,10 +58,10 @@ function renderChart(canvas, chartData) {
     new Chart(canvas, {
       ...chartData,
       options: {
-        animation: {
-          onComplete: res,
-        },
+        animation: false,
+        ...chartData.options,
       },
     });
+    res();
   });
 }

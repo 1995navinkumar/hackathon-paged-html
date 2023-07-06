@@ -1,4 +1,4 @@
-import { bladeTokens } from './blade-tokens';
+import { bladeTokens } from "./blade-tokens";
 
 export const styles = `
     ${bladeTokens}
@@ -78,5 +78,23 @@ export const styles = `
         color: gray;
         font-weight: bold;
         padding: 8px 0px;
+    }
+
+    .labels-legend {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .legend-element {
+        display: flex;
+        gap: 16px;
+        font-size: 16px;
+    }
+
+    .legend-element .box {
+        width: 16px;
+        height: 16px;
+        background-color: var(--box-color); /* pass using style on the legend box div */
     }
 `;
