@@ -120,7 +120,18 @@ export default async function generateExecutiveReport() {
       Section({
         name: "tax_summary",
         displayName: "Tax Summary",
-        templates: [Table({ ...taxData })],
+        templates: [Table({ ...taxData.taxTable })],
+      }),
+      Section({
+        name: 'TDS',
+        displayName: 'TDS',
+        templates: [
+          pdfChart({
+            chartData: taxData.taxChart,
+            height: "350px",
+            width: "100%",
+          }),
+        ],
       }),
     ],
   });
