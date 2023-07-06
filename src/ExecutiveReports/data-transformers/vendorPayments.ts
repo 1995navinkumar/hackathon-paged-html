@@ -127,7 +127,7 @@ function getAmountByContacts(data){
         plugins : {
           datalabels : {
             font : {
-              size : '18px'
+              size : '18px',
             }
           },
           legend : {
