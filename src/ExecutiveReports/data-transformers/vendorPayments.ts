@@ -1,3 +1,5 @@
+import { colors } from "../constants";
+
 export function vendorPaymentsTransformer(apiData) {
   const topVendorPayments = getTopVendorPayments(apiData);
   const monthVsAmount = getMonthVsAmount(apiData);
@@ -41,11 +43,39 @@ function getMonthVsAmount(data) {
       datasets: [
         {
           label: 'Vendor Payments by Months',
+          barThickness : 30,
           data: sortedAmount.map((c) => Object.values(c)[0] / 100),
-          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          backgroundColor: colors,
         },
       ],
     },
+    options : {
+      plugins : {
+        legend : {
+          display : false,
+        },
+        datalabels : {
+          anchor : 'end',
+          align : 'top',
+          color : "hsla(229, 10%, 60%, 1)",
+          font : {
+            size : '14px'
+          }
+        }
+      },
+      scales : {
+        x : {
+          grid : {
+            color : 'hsla(230, 23%, 29%, 1)'
+          }
+        },
+        y : {
+          grid : {
+            color : 'hsla(230, 23%, 29%, 1)'
+          }
+        }
+      }
+    }
   };
 }
 
