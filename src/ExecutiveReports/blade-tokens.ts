@@ -1,6 +1,5 @@
 export const bladeTokens = `
-:root {
-  --name: bankingTheme;
+ :root {
   --border-radius-none: 0px;
   --border-radius-small: 2px;
   --border-radius-medium: 4px;

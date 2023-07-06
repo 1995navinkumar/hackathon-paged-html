@@ -1,4 +1,4 @@
-import { bladeTokens } from './blade-tokens';
+import { bladeTokens } from "./blade-tokens";
 
 export const styles = `
     ${bladeTokens}
@@ -78,5 +78,52 @@ export const styles = `
         color: gray;
         font-weight: bold;
         padding: 8px 0px;
+    }
+
+    .count-card-container {
+        display : flex;
+        justify-content : space-between;
+        padding : 12px;
+    }
+
+    .count-card {
+        height: 100px;
+        width: 100px;
+        border-radius : 16px;
+        border: 1px solid #dedede;
+        display: flex;
+        flex-direction: column;
+        row-gap: 16px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .count-value {
+        font-weight : bold;
+        font-size : 36px;
+        color : var(--colors-feedback-background-negative-high-contrast);
+    }
+
+    .vp_contacts {
+        display : flex;
+        justify-content : center;
+    }
+
+    .labels-legend {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .legend-element {
+        display: flex;
+        gap: 16px;
+        font-size: 16px;
+    }
+
+    .legend-element .box {
+        width: 16px;
+        height: 16px;
+        background-color: var(--box-color); /* pass using style on the legend box div */
     }
 `;

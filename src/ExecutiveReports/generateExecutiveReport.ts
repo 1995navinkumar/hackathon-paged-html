@@ -1,13 +1,13 @@
-import PagedHTML, { components, utils } from 'paged-html';
-import { fetchQuarterlyReportData } from '../fetchQuarterlyReport';
-import { pdfChart } from './components';
+import PagedHTML, { components, utils } from "paged-html";
+import { fetchQuarterlyReportData } from "../fetchQuarterlyReport";
+import { countCard, pdfChart } from "./components";
 import {
   vendorPaymentsTransformer,
   taxPaymentsTransformer,
   payoutLinksTransformer,
   payoutsTransformer,
-} from './data-transformers';
-import { styles } from './pdf-styles';
+} from "./data-transformers";
+import { styles } from "./pdf-styles";
 
 const { Table, Section, TOC } = components;
 
@@ -15,18 +15,18 @@ export default async function generateExecutiveReport() {
   const el = utils.htmlToElement(
     `<div id="pdf-container"> 
 
-    </div>`,
+    </div>`
   );
   document.body.appendChild(el);
 
-  const shadow = el.attachShadow({ mode: 'closed' });
+  const shadow = el.attachShadow({ mode: "closed" });
 
   shadow.appendChild(
     utils.htmlToElement(`
-      <div>
+      <div id="pdf-root">
           <style>${styles}</style>
       </div>
-    `),
+    `)
   );
 
   const root = shadow.firstElementChild;
@@ -35,8 +35,8 @@ export default async function generateExecutiveReport() {
     root,
     events: {
       onPageEnd: (page, instance) => {
-        const topLeft = page.querySelector('.top-left');
-        const bottomRight = page.querySelector('.bottom-right');
+        const topLeft = page.querySelector(".top-left");
+        const bottomRight = page.querySelector(".bottom-right");
         const style = `
             position: relative;
             top: 10px;
@@ -59,16 +59,36 @@ export default async function generateExecutiveReport() {
 
   const plData = payoutLinksTransformer(payoutLinksData);
 
-  const pData = payoutsTransformer(payoutsData);
+  const payouts = payoutsTransformer(payoutsData);
 
   const vendorPaymentSection = Section({
-    name: 'vendorPayment',
+    name: "vendorPayment",
     newPage: true,
-    displayName: 'Vendor Payments',
+    displayName: "Vendor Payments",
     templates: [
       Section({
-        name: 'Top10VendorPayments',
-        displayName: 'Top 10 Vendor Payments',
+        name: "groupByStatus",
+        displayName: "Vendor Payments Summary",
+        templates: [countCard({ data: vpData.groupByStatus })],
+      }),
+      Section({
+        name: "amountByContacts",
+        threshold: 500,
+        displayName: "Payments by contact",
+        templates: [
+          pdfChart({
+            name: "vp_contacts",
+            chartData: vpData.amountByContacts,
+            threshold: 500,
+            height: "400px",
+            width: "400px",
+          }),
+        ],
+      }),
+      Section({
+        name: "Top10VendorPayments",
+        threshold: 300,
+        displayName: "Top 10 Vendor Payments",
         templates: [
           Table({
             ...vpData.vpTable,
@@ -76,13 +96,16 @@ export default async function generateExecutiveReport() {
         ],
       }),
       Section({
-        name: 'Vendor_Payments_by_Months',
-        displayName: 'Vendor Payments by Months',
+        name: "Vendor_Payments_by_Months",
+        threshold: 500,
+        displayName: "Vendor Payments by Months",
         templates: [
           pdfChart({
+            name: "vp_month",
             chartData: vpData.vpChart,
-            height: 350,
-            width: 500,
+            threshold: 500,
+            height: "400px",
+            width: "100%",
           }),
         ],
       }),
@@ -90,12 +113,12 @@ export default async function generateExecutiveReport() {
   });
   const TaxSection = Section({
     newPage: true,
-    name: 'TaxPayments',
-    displayName: 'Tax Payments',
+    name: "TaxPayments",
+    displayName: "Tax Payments",
     templates: [
       Section({
-        name: 'tax_summary',
-        displayName: 'Tax Summary',
+        name: "tax_summary",
+        displayName: "Tax Summary",
         templates: [Table({ ...taxData })],
       }),
     ],
@@ -118,8 +141,8 @@ export default async function generateExecutiveReport() {
         templates: [
           pdfChart({
             chartData: plData.plLineChart,
-            height: 350,
-            width: 500,
+            height: "350px",
+            width: "100%",
           }),
         ],
       }),
@@ -129,8 +152,8 @@ export default async function generateExecutiveReport() {
         templates: [
           pdfChart({
             chartData: plData.plChart,
-            height: 350,
-            width: 500,
+            height: "350px",
+            width: "100%",
           }),
         ],
       }),
@@ -138,7 +161,7 @@ export default async function generateExecutiveReport() {
   });
   await instance.render([vendorPaymentSection, TaxSection, payoutLinksSection, TOC]);
 
-  // printPage(shadow.innerHTML);
+  printPage(shadow.innerHTML);
   // document.body.removeChild(el);
 }
 // In order to print just the report contents, we would need a new document. Hence used Iframe.
@@ -157,16 +180,14 @@ function setPrint() {
 }
 
 function printPage(srcDoc) {
-  const hideFrame = document.createElement('iframe');
+  const hideFrame = document.createElement("iframe");
   hideFrame.onload = setPrint;
-  // hideFrame.style.height = '100vh';
-  // hideFrame.style.width = '100vw';
-  hideFrame.style.position = 'fixed';
-  hideFrame.style.right = '0';
-  hideFrame.style.bottom = '0';
-  hideFrame.style.width = '0';
-  hideFrame.style.height = '0';
-  hideFrame.style.border = '0';
+  hideFrame.style.position = "fixed";
+  hideFrame.style.right = "0";
+  hideFrame.style.bottom = "0";
+  hideFrame.style.width = "0";
+  hideFrame.style.height = "0";
+  hideFrame.style.border = "0";
   hideFrame.srcdoc = getHtml(srcDoc);
   document.body.appendChild(hideFrame);
 }
