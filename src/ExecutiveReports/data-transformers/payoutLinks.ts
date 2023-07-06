@@ -30,7 +30,7 @@ export function payoutLinksTransformer(apiData) {
     const options = { day: '2-digit', month: 'short', year: 'numeric' };
     return new Intl.DateTimeFormat('en-GB', options).format(date);
   }
-  const rows = apiData
+  const rows = [...apiData]
   .sort((row1,row2) => row2.amount - row1.amount)
   .slice(0,10);
 
