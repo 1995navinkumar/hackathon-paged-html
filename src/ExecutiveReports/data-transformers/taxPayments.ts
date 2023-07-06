@@ -1,4 +1,4 @@
-import { colors } from "../constants";
+import { colors, graphColorMap } from "../constants";
 
 export function taxPaymentsTransformer(apiData) {
   const taxPayments = getTaxPayments(apiData)
@@ -51,7 +51,8 @@ function getTaxData(data) {
     if ('tds_category' in c.tax_payment.tds) {
       if (c.tax_payment.status == "paid") {
         a.push({
-          "category": c.tax_payment.tds.tds_category.name,
+          "tax_category": c.tax_payment.tds.tds_category.name,
+          "code": c.tax_payment.tds.tds_category.code,
           "created_at": dateFormatter.format(c.tax_payment.tds.created_at * 1000),
           "total_tax_amount": c.total_tax_amount
         })
@@ -72,17 +73,21 @@ function getTaxData(data) {
     return reduceData
   };
 
-  const groupedData = groupBy(t, 'category')
+  const groupedData = groupBy(t, 'code')
 
   const tdsCategoryData = []
 
   for (const i in groupedData) {
     let amount = 0
+    let tax_category = ""
     for (let j = 0; j < groupedData[i].length; j++) {
       amount += groupedData[i][j].total_tax_amount
+      tax_category = groupedData[i][j].tax_category
     }
+   
     tdsCategoryData.push({
-      "category": i,
+      "tax_category" : tax_category,
+      "code": i,
       "total_amount": amount
     })
   }
@@ -90,20 +95,34 @@ function getTaxData(data) {
   return {
     type: 'bar',
     data: {
-      labels: tdsCategoryData.map(d => d.category),
+      labels: tdsCategoryData.map(d => d.code),
       datasets: [
         {
-          label : 'TDS',
           barThickness : 30,
           data: tdsCategoryData.map(d => d.total_amount),
-          backgroundColor: colors[1],
+          backgroundColor: colors,
+          borderColor: "white",
         },
       ],
     },
     options: {
       plugins: {
         legend: {
-          display: false,
+          display: true,
+          position: "bottom",
+          labels : {
+            generateLabels(){
+              const customLabels = tdsCategoryData.reduce((e,t,index)=>{
+               e.push({
+                "text" : `${t.code} - ${t.tax_category}`,
+                "fontColor" : "white",
+                "fillStyle" : colors[index]          
+               })
+               return e
+              },[])
+              return customLabels
+            }
+          }
         },
         datalabels: {
           anchor: 'end',
