@@ -50,7 +50,6 @@ function getTaxData(data) {
   const t = data.reduce((a, c) => {
     if ('tds_category' in c.tax_payment.tds) {
       if (c.tax_payment.status == "paid") {
-        console.log(c.tax_payment.tds.tds_category.name)
         a.push({
           "tax_category": c.tax_payment.tds.tds_category.name,
           "code": c.tax_payment.tds.tds_category.code,
@@ -101,8 +100,8 @@ function getTaxData(data) {
         {
           barThickness : 30,
           data: tdsCategoryData.map(d => d.total_amount),
-          backgroundColor: graphColorMap.A,
-          borderColor: graphColorMap.A,
+          backgroundColor: colors,
+          borderColor: "white",
         },
       ],
     },
@@ -110,14 +109,14 @@ function getTaxData(data) {
       plugins: {
         legend: {
           display: true,
-          position: "right",
+          position: "bottom",
           labels : {
             generateLabels(){
-              const customLabels = tdsCategoryData.reduce((e,t)=>{
+              const customLabels = tdsCategoryData.reduce((e,t,index)=>{
                e.push({
                 "text" : `${t.code} - ${t.tax_category}`,
                 "fontColor" : "white",
-                "fillStyle" : graphColorMap.A            
+                "fillStyle" : colors[index]          
                })
                return e
               },[])
