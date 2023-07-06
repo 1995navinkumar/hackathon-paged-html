@@ -124,20 +124,50 @@ export default async function generateExecutiveReport() {
     ],
   });
 
-  console.log('plData', plData.plChart);
+  console.log("plData", plData.plChart);
+
+  const payoutsSection = Section({
+    newPage: true,
+    name: "Payouts",
+    displayName: "Payouts",
+    templates: [
+      Section({
+        name: "payouts_mode",
+        displayName: "Payouts Mode",
+        templates: [
+          pdfChart({
+            chartData: payouts.payoutsModeChart.chartConfig,
+            height: 300,
+            width: 500,
+          }),
+        ],
+      }),
+      Section({
+        name: "payouts_ranges",
+        displayName: "Payout Ranges",
+        templates: [
+          pdfChart({
+            chartData: payouts.payoutRangesChart.chartConfig,
+            height: 300,
+            width: 500,
+          }),
+        ],
+      }),
+    ],
+  });
 
   const payoutLinksSection = Section({
-    name: 'payoutLinks',
+    name: "payoutLinks",
     newPage: true,
-    displayName: 'Payout Links',
+    displayName: "Payout Links",
     templates: [
       Table({
         ...plData.plTable,
       }),
       Section({
-        name: 'PayoutLinkslineChart',
+        name: "PayoutLinkslineChart",
         newPage: true,
-        displayName: 'Trend for Number of Payments on each day',
+        displayName: "Trend for Number of Payments on each day",
         templates: [
           pdfChart({
             chartData: plData.plLineChart,
@@ -147,8 +177,8 @@ export default async function generateExecutiveReport() {
         ],
       }),
       Section({
-        name: 'PayoutLinksChart',
-        displayName: 'Amount vs User for each payment',
+        name: "PayoutLinksChart",
+        displayName: "Amount vs User for each payment",
         templates: [
           pdfChart({
             chartData: plData.plChart,
@@ -159,7 +189,13 @@ export default async function generateExecutiveReport() {
       }),
     ],
   });
-  await instance.render([vendorPaymentSection, TaxSection, payoutLinksSection, TOC]);
+  await instance.render([
+    payoutsSection,
+    vendorPaymentSection,
+    TaxSection,
+    payoutLinksSection,
+    TOC,
+  ]);
 
   printPage(shadow.innerHTML);
   // document.body.removeChild(el);
