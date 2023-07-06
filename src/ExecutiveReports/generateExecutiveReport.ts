@@ -13,7 +13,7 @@ const { Table, Section, TOC } = components;
 
 export default async function generateExecutiveReport() {
   const el = utils.htmlToElement(
-    `<div id="pdf-container" style="height: 1px; overflow : scroll;"> 
+    `<div id="pdf-container"> 
 
     </div>`,
   );
@@ -101,10 +101,45 @@ export default async function generateExecutiveReport() {
     ],
   });
 
-  await instance.render([vendorPaymentSection, TaxSection, TOC]);
+  console.log('plData', plData.plChart);
 
-  printPage(shadow.innerHTML);
-  document.body.removeChild(el);
+  const payoutLinksSection = Section({
+    name: 'payoutLinks',
+    newPage: true,
+    displayName: 'Payout Links',
+    templates: [
+      Table({
+        ...plData.plTable,
+      }),
+      Section({
+        name: 'PayoutLinkslineChart',
+        newPage: true,
+        displayName: 'Trend for Number of Payments on each day',
+        templates: [
+          pdfChart({
+            chartData: plData.plLineChart,
+            height: 350,
+            width: 500,
+          }),
+        ],
+      }),
+      Section({
+        name: 'PayoutLinksChart',
+        displayName: 'Amount vs User for each payment',
+        templates: [
+          pdfChart({
+            chartData: plData.plChart,
+            height: 350,
+            width: 500,
+          }),
+        ],
+      }),
+    ],
+  });
+  await instance.render([vendorPaymentSection, TaxSection, payoutLinksSection, TOC]);
+
+  // printPage(shadow.innerHTML);
+  // document.body.removeChild(el);
 }
 // In order to print just the report contents, we would need a new document. Hence used Iframe.
 // window.print will print entire page which is not needed.
