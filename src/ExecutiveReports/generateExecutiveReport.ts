@@ -46,7 +46,7 @@ export default async function generateExecutiveReport() {
         topLeft.innerHTML = `<img src='/dist/assets/img/RazorpayX-logo.svg' style='${style}'/>`;
         bottomRight.innerHTML = `<span style='position: relative; top: 10px;'>Page no ${page.pageNumber}</span>`;
       },
-      onPageStart: () => {},
+      onPageStart: () => { },
     },
   });
 
@@ -127,7 +127,7 @@ export default async function generateExecutiveReport() {
         threshold: 500,
         displayName: 'TDS Payments by Months',
         templates: [
-          pdfChart({         
+          pdfChart({
             chartData: taxData.taxChart,
             height: "350px",
             width: "100%",
@@ -188,7 +188,7 @@ export default async function generateExecutiveReport() {
       }),
       Section({
         name: "PayoutLinksChart",
-        threshold : 300,
+        threshold: 300,
         displayName: "Amount vs User for each payment",
         templates: [
           pdfChart({
@@ -205,8 +205,11 @@ export default async function generateExecutiveReport() {
     vendorPaymentSection,
     TaxSection,
     payoutLinksSection,
-    TOC,
   ]);
+
+  instance.events.onPageEnd = () => { };
+
+  await instance.render([TOC]);
 
   printPage(shadow.innerHTML);
   // document.body.removeChild(el);
