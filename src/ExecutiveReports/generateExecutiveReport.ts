@@ -135,8 +135,8 @@ export default async function generateExecutiveReport() {
         templates: [
           pdfChart({
             chartData: payouts.payoutsModeChart.chartConfig,
-            height: 300,
-            width: 500,
+            height: "400px",
+            width: "400px",
           }),
         ],
       }),
@@ -146,8 +146,8 @@ export default async function generateExecutiveReport() {
         templates: [
           pdfChart({
             chartData: payouts.payoutRangesChart.chartConfig,
-            height: 300,
-            width: 500,
+            height: "400px",
+            width: "100%",
           }),
         ],
       }),
