@@ -80,6 +80,35 @@ export const styles = `
         padding: 8px 0px;
     }
 
+    .count-card-container {
+        display : flex;
+        justify-content : space-between;
+        padding : 12px;
+    }
+
+    .count-card {
+        height: 100px;
+        width: 100px;
+        border-radius : 16px;
+        border: 1px solid #dedede;
+        display: flex;
+        flex-direction: column;
+        row-gap: 16px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .count-value {
+        font-weight : bold;
+        font-size : 36px;
+        color : var(--colors-feedback-background-negative-high-contrast);
+    }
+
+    .vp_contacts {
+        display : flex;
+        justify-content : center;
+    }
+
     .labels-legend {
         display: flex;
         flex-direction: column;
