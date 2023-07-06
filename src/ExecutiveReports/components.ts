@@ -5,7 +5,6 @@ import { PagedComponent, PagedeComponentCreator, PagedHTMLInstance } from 'paged
 export function pdfChart({
   chartData,
   height = 500,
-  width = 500,
 }: {
   chartData: Record<string, any>;
   height?: number;
@@ -21,7 +20,7 @@ export function pdfChart({
 
     async function* renderer() {
       const chartEl = utils.htmlToElement(`
-                <div style="width:${width}px; height:${height}px;">
+                <div>
                     <canvas></canvas>
                 </div>
             `);
@@ -38,7 +37,7 @@ export function pdfChart({
       pageContent.removeChild(chartEl);
 
       const imageEl = utils.htmlToElement(
-        `<img src=${imageUri} style="height : ${height}; width : ${width}"/>`,
+        `<img src=${imageUri} style="height : ${height}; width : 100%"/>`,
       );
 
       pageContent.appendChild(imageEl);
@@ -58,9 +57,10 @@ function renderChart(canvas, chartData) {
     new Chart(canvas, {
       ...chartData,
       options: {
+        ...chartData.options,
         animation: {
-          onComplete: res,
-        },
+          onComplete : res
+        }
       },
     });
   });
