@@ -1,26 +1,26 @@
-import Chart from 'chart.js/auto';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { utils } from 'paged-html';
-import { PagedComponent, PagedeComponentCreator, PagedHTMLInstance } from 'paged-html/build/types';
+import Chart from "chart.js/auto";
+import ChartDataLabels from "chartjs-plugin-datalabels";
+import { utils } from "paged-html";
+import { PagedComponent, PagedeComponentCreator, PagedHTMLInstance } from "paged-html/build/types";
 
 Chart.register(ChartDataLabels);
 
-export function countCard({ data = {} }){
+export function countCard({ data = {} }) {
   return function render(pagedInstance: PagedHTMLInstance): PagedComponent {
     const entries = Object.entries(data);
     async function* renderer() {
       const countContainer = utils.htmlToElement(`
         <div class="count-card-container">
-          ${
-            entries
-              .map(entry => `
+          ${entries
+            .map(
+              (entry) => `
                   <div class="count-card">
                     <span class="count-value">${entry[1]}</span>
                     <span class="count-label">${entry[0]}</span>
                   </div>
-              `)
-              .join("")
-          }
+              `
+            )
+            .join("")}
         </div>
       `);
       const contentArea = pagedInstance.getCurrentPage().contentArea;
@@ -35,7 +35,7 @@ export function countCard({ data = {} }){
 }
 
 export function pdfChart({
-  name = '',
+  name = "",
   chartData,
   threshold = 500,
   height = "inherit",
@@ -65,7 +65,7 @@ export function pdfChart({
       const pageContent = pagedInstance.getCurrentPage().contentArea;
       pageContent.appendChild(chartEl);
 
-      const canvasEl = chartEl.querySelector('canvas');
+      const canvasEl = chartEl.querySelector("canvas");
 
       await renderChart(canvasEl, chartData);
 
@@ -77,7 +77,7 @@ export function pdfChart({
         `<div class='${name}'>
             <img src=${imageUri} style="height : ${height}; width : ${width}"/>
           </div>
-        `,
+        `
       );
 
       pageContent.appendChild(imageEl);
@@ -97,11 +97,10 @@ function renderChart(canvas, chartData) {
     new Chart(canvas, {
       ...chartData,
       options: {
+        animation: false,
         ...chartData.options,
-        animation: {
-          onComplete: res,
-        },
       },
     });
+    res();
   });
 }

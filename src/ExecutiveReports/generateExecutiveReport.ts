@@ -1,13 +1,13 @@
-import PagedHTML, { components, utils } from 'paged-html';
-import { fetchQuarterlyReportData } from '../fetchQuarterlyReport';
-import { countCard, pdfChart } from './components';
+import PagedHTML, { components, utils } from "paged-html";
+import { fetchQuarterlyReportData } from "../fetchQuarterlyReport";
+import { countCard, pdfChart } from "./components";
 import {
   vendorPaymentsTransformer,
   taxPaymentsTransformer,
   payoutLinksTransformer,
   payoutsTransformer,
-} from './data-transformers';
-import { styles } from './pdf-styles';
+} from "./data-transformers";
+import { styles } from "./pdf-styles";
 
 const { Table, Section, TOC } = components;
 
@@ -15,18 +15,18 @@ export default async function generateExecutiveReport() {
   const el = utils.htmlToElement(
     `<div id="pdf-container"> 
 
-    </div>`,
+    </div>`
   );
   document.body.appendChild(el);
 
-  const shadow = el.attachShadow({ mode: 'closed' });
+  const shadow = el.attachShadow({ mode: "closed" });
 
   shadow.appendChild(
     utils.htmlToElement(`
       <div id="pdf-root">
           <style>${styles}</style>
       </div>
-    `),
+    `)
   );
 
   const root = shadow.firstElementChild;
@@ -35,8 +35,8 @@ export default async function generateExecutiveReport() {
     root,
     events: {
       onPageEnd: (page, instance) => {
-        const topLeft = page.querySelector('.top-left');
-        const bottomRight = page.querySelector('.bottom-right');
+        const topLeft = page.querySelector(".top-left");
+        const bottomRight = page.querySelector(".bottom-right");
         const style = `
             position: relative;
             top: 10px;
@@ -59,38 +59,36 @@ export default async function generateExecutiveReport() {
 
   const plData = payoutLinksTransformer(payoutLinksData);
 
-  const pData = payoutsTransformer(payoutsData);
+  const payouts = payoutsTransformer(payoutsData);
 
   const vendorPaymentSection = Section({
-    name: 'vendorPayment',
+    name: "vendorPayment",
     newPage: true,
-    displayName: 'Vendor Payments',
+    displayName: "Vendor Payments",
     templates: [
       Section({
-        name: 'groupByStatus',
-        displayName: 'Vendor Payments Summary',
-        templates: [
-          countCard({data : vpData.groupByStatus})
-        ],
+        name: "groupByStatus",
+        displayName: "Vendor Payments Summary",
+        templates: [countCard({ data: vpData.groupByStatus })],
       }),
       Section({
-        name: 'amountByContacts',
-        threshold : 500,
-        displayName: 'Payments by contact',
+        name: "amountByContacts",
+        threshold: 500,
+        displayName: "Payments by contact",
         templates: [
           pdfChart({
-            name: 'vp_contacts',
+            name: "vp_contacts",
             chartData: vpData.amountByContacts,
-            threshold : 500,
+            threshold: 500,
             height: "400px",
             width: "400px",
           }),
         ],
       }),
       Section({
-        name: 'Top10VendorPayments',
-        threshold : 300,
-        displayName: 'Top 10 Vendor Payments',
+        name: "Top10VendorPayments",
+        threshold: 300,
+        displayName: "Top 10 Vendor Payments",
         templates: [
           Table({
             ...vpData.vpTable,
@@ -98,14 +96,14 @@ export default async function generateExecutiveReport() {
         ],
       }),
       Section({
-        name: 'Vendor_Payments_by_Months',
-        threshold : 500,
-        displayName: 'Vendor Payments by Months',
+        name: "Vendor_Payments_by_Months",
+        threshold: 500,
+        displayName: "Vendor Payments by Months",
         templates: [
           pdfChart({
-            name : 'vp_month',
+            name: "vp_month",
             chartData: vpData.vpChart,
-            threshold : 500,
+            threshold: 500,
             height: "400px",
             width: "100%",
           }),
@@ -115,18 +113,47 @@ export default async function generateExecutiveReport() {
   });
   const TaxSection = Section({
     newPage: true,
-    name: 'TaxPayments',
-    displayName: 'Tax Payments',
+    name: "TaxPayments",
+    displayName: "Tax Payments",
     templates: [
       Section({
-        name: 'tax_summary',
-        displayName: 'Tax Summary',
+        name: "tax_summary",
+        displayName: "Tax Summary",
         templates: [Table({ ...taxData })],
       }),
     ],
   });
+  const payoutsSection = Section({
+    newPage: true,
+    name: "Payouts",
+    displayName: "Payouts",
+    templates: [
+      Section({
+        name: "payouts_mode",
+        displayName: "Payouts Mode",
+        templates: [
+          pdfChart({
+            chartData: payouts.payoutsModeChart.chartConfig,
+            height: 300,
+            width: 500,
+          }),
+        ],
+      }),
+      Section({
+        name: "payouts_ranges",
+        displayName: "Payout Ranges",
+        templates: [
+          pdfChart({
+            chartData: payouts.payoutRangesChart.chartConfig,
+            height: 300,
+            width: 500,
+          }),
+        ],
+      }),
+    ],
+  });
 
-  await instance.render([vendorPaymentSection, TaxSection, TOC]);
+  await instance.render([payoutsSection, vendorPaymentSection, TaxSection, TOC]);
 
   printPage(shadow.innerHTML);
   // document.body.removeChild(el);
@@ -147,16 +174,14 @@ function setPrint() {
 }
 
 function printPage(srcDoc) {
-  const hideFrame = document.createElement('iframe');
+  const hideFrame = document.createElement("iframe");
   hideFrame.onload = setPrint;
-  // hideFrame.style.height = '100vh';
-  // hideFrame.style.width = '100vw';
-  hideFrame.style.position = 'fixed';
-  hideFrame.style.right = '0';
-  hideFrame.style.bottom = '0';
-  hideFrame.style.width = '0';
-  hideFrame.style.height = '0';
-  hideFrame.style.border = '0';
+  hideFrame.style.position = "fixed";
+  hideFrame.style.right = "0";
+  hideFrame.style.bottom = "0";
+  hideFrame.style.width = "0";
+  hideFrame.style.height = "0";
+  hideFrame.style.border = "0";
   hideFrame.srcdoc = getHtml(srcDoc);
   document.body.appendChild(hideFrame);
 }
