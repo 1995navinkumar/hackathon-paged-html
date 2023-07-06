@@ -103,4 +103,9 @@ export const styles = `
         font-size : 36px;
         color : var(--colors-feedback-background-negative-high-contrast);
     }
+
+    .vp_contacts {
+        display : flex;
+        justify-content : center;
+    }
 `;

@@ -1,7 +1,9 @@
 import Chart from 'chart.js/auto';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { utils } from 'paged-html';
 import { PagedComponent, PagedeComponentCreator, PagedHTMLInstance } from 'paged-html/build/types';
 
+Chart.register(ChartDataLabels);
 
 export function countCard({ data = {} }){
   return function render(pagedInstance: PagedHTMLInstance): PagedComponent {
@@ -33,17 +35,22 @@ export function countCard({ data = {} }){
 }
 
 export function pdfChart({
+  name = '',
   chartData,
-  height = 500,
+  threshold = 500,
+  height = "inherit",
+  width = "100%",
 }: {
+  name?: string;
   chartData: Record<string, any>;
-  height?: number;
-  width?: number;
+  threshold?: number;
+  height?: string;
+  width?: string;
 }): PagedeComponentCreator {
   return function render(pagedInstance: PagedHTMLInstance): PagedComponent {
     function init() {
       const remainingHeight = pagedInstance.getRemainingHeight();
-      if (remainingHeight < height) {
+      if (remainingHeight < threshold) {
         pagedInstance.insertNewPage();
       }
     }
@@ -67,7 +74,10 @@ export function pdfChart({
       pageContent.removeChild(chartEl);
 
       const imageEl = utils.htmlToElement(
-        `<img src=${imageUri} style="height : ${height}; width : 100%"/>`,
+        `<div class='${name}'>
+            <img src=${imageUri} style="height : ${height}; width : ${width}"/>
+          </div>
+        `,
       );
 
       pageContent.appendChild(imageEl);

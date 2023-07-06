@@ -23,7 +23,7 @@ export default async function generateExecutiveReport() {
 
   shadow.appendChild(
     utils.htmlToElement(`
-      <div>
+      <div id="pdf-root">
           <style>${styles}</style>
       </div>
     `),
@@ -74,7 +74,22 @@ export default async function generateExecutiveReport() {
         ],
       }),
       Section({
+        name: 'amountByContacts',
+        threshold : 500,
+        displayName: 'Payments by contact',
+        templates: [
+          pdfChart({
+            name: 'vp_contacts',
+            chartData: vpData.amountByContacts,
+            threshold : 500,
+            height: "400px",
+            width: "400px",
+          }),
+        ],
+      }),
+      Section({
         name: 'Top10VendorPayments',
+        threshold : 300,
         displayName: 'Top 10 Vendor Payments',
         templates: [
           Table({
@@ -84,13 +99,15 @@ export default async function generateExecutiveReport() {
       }),
       Section({
         name: 'Vendor_Payments_by_Months',
-        threshold : 300,
+        threshold : 500,
         displayName: 'Vendor Payments by Months',
         templates: [
           pdfChart({
+            name : 'vp_month',
             chartData: vpData.vpChart,
-            height: 300,
-            width: 500,
+            threshold : 500,
+            height: "400px",
+            width: "100%",
           }),
         ],
       }),
@@ -111,8 +128,8 @@ export default async function generateExecutiveReport() {
 
   await instance.render([vendorPaymentSection, TaxSection]);
 
-  printPage(shadow.innerHTML);
-  document.body.removeChild(el);
+  // printPage(shadow.innerHTML);
+  // document.body.removeChild(el);
 }
 // In order to print just the report contents, we would need a new document. Hence used Iframe.
 // window.print will print entire page which is not needed.

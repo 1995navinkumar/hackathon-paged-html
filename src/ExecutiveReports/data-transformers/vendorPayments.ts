@@ -2,11 +2,12 @@ export function vendorPaymentsTransformer(apiData) {
   const topVendorPayments = getTopVendorPayments(apiData);
   const monthVsAmount = getMonthVsAmount(apiData);
   const groupByStatus = getGroupByStatus(apiData);
-  
+  const amountByContacts = getAmountByContacts(apiData);
   return {
     vpTable: topVendorPayments,
     vpChart: monthVsAmount,
-    groupByStatus
+    groupByStatus,
+    amountByContacts
   };
 }
 
@@ -49,8 +50,9 @@ function getMonthVsAmount(data) {
 }
 
 function getTopVendorPayments(data) {
-  const defaultHeader = (column) => column.name;
+  const defaultHeader = (column) => column.name.split("_").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
   const defaultCell = (column, row, index) => row[column.name];
+
   const columns = [
     {
       name: 'created_at',
@@ -87,4 +89,60 @@ function getGroupByStatus(data){
     }
     return a;
   },{});  
+}
+
+function getAmountByContacts(data){
+    const groupByContacts = data.reduce((a,c) => {
+      const key = c.contact.name;
+      if(key in a) {
+        a[key] = [a[key][0] + c.total_amount, a[key][1] + 1];
+      } else {
+        a[key] = [ c.total_amount, 1]
+      }
+      return a;
+    },{});  
+
+    
+    const sortByAmount = Object.entries(groupByContacts).sort((entry1,entry2) => entry2[1][0] - entry1[1][0]);
+
+    const top5Contacts = sortByAmount.slice(0,5);
+
+    const contactsByAmount = Object.fromEntries(top5Contacts);
+
+    
+    const keys = Object.keys(contactsByAmount);
+    const values = Object.values(contactsByAmount);
+
+    return {
+      type : 'doughnut',
+      data : {
+        labels : keys,
+        datasets : [{
+          label: 'Total Amount',
+          data : values.map(d => d[0] / 100)
+        }],
+        radius : '40%'
+      },
+      options : {
+        plugins : {
+          datalabels : {
+            font : {
+              size : '18px'
+            }
+          },
+          legend : {
+            position : 'right',
+            labels : {
+              padding : 64,
+              boxWidth : 64,
+              boxHeight : 32,
+              font : {
+                size : 18
+              }
+            }
+          }
+        }
+      }
+    };
+    
 }
