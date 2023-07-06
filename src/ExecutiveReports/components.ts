@@ -38,7 +38,7 @@ export function pdfChart({
       pageContent.removeChild(chartEl);
 
       const imageEl = utils.htmlToElement(
-        `<img src=${imageUri} style="height : ${height}; width : ${width}"/>`,
+        `<img src=${imageUri} style="height : ${height}px; width: 100%;"/>`,
       );
 
       pageContent.appendChild(imageEl);
@@ -59,6 +59,7 @@ function renderChart(canvas, chartData) {
       ...chartData,
       options: {
         animation: {
+          
           onComplete: res,
         },
       },
