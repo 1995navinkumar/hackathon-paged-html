@@ -37,7 +37,7 @@ export function countCard({ data = {} }) {
 export function pdfChart({
   name = "",
   chartData,
-  threshold = 500,
+  threshold = 300,
   height = "inherit",
   width = "100%",
 }: {

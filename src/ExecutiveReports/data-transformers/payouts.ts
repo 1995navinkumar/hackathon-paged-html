@@ -47,6 +47,14 @@ function getPayoutsModeChart(payoutsData) {
         },
         legend: {
           position: "right",
+          labels : {
+            padding : 64,
+            boxWidth : 64,
+            boxHeight : 32,
+            font : {
+              size : 18
+            }
+          }
         },
       },
     },
@@ -88,9 +96,6 @@ function getPayoutRangesChart(payoutsData) {
       plugins: {
         title: {
           display: false,
-        },
-        legend: {
-          position: "right",
         },
       },
     },

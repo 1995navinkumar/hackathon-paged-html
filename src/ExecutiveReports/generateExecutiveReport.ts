@@ -111,6 +111,7 @@ export default async function generateExecutiveReport() {
       }),
     ],
   });
+
   const TaxSection = Section({
     newPage: true,
     name: "TaxPayments",
@@ -135,8 +136,8 @@ export default async function generateExecutiveReport() {
         templates: [
           pdfChart({
             chartData: payouts.payoutsModeChart.chartConfig,
-            height: "400px",
-            width: "400px",
+            height: "300px",
+            width: "300px",
           }),
         ],
       }),
@@ -146,7 +147,7 @@ export default async function generateExecutiveReport() {
         templates: [
           pdfChart({
             chartData: payouts.payoutRangesChart.chartConfig,
-            height: "400px",
+            height: "300px",
             width: "100%",
           }),
         ],
@@ -164,7 +165,6 @@ export default async function generateExecutiveReport() {
       }),
       Section({
         name: "PayoutLinkslineChart",
-        newPage: true,
         displayName: "Trend for Number of Payments on each day",
         templates: [
           pdfChart({
@@ -176,6 +176,7 @@ export default async function generateExecutiveReport() {
       }),
       Section({
         name: "PayoutLinksChart",
+        threshold : 300,
         displayName: "Amount vs User for each payment",
         templates: [
           pdfChart({
@@ -195,8 +196,8 @@ export default async function generateExecutiveReport() {
     TOC,
   ]);
 
-  printPage(shadow.innerHTML);
-  document.body.removeChild(el);
+  // printPage(shadow.innerHTML);
+  // document.body.removeChild(el);
 }
 // In order to print just the report contents, we would need a new document. Hence used Iframe.
 // window.print will print entire page which is not needed.

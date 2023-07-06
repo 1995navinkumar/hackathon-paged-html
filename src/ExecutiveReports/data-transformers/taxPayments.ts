@@ -1,5 +1,5 @@
 export function taxPaymentsTransformer(apiData) {
-  let columns = [
+  const columns = [
     {
       name: 'Tax Id',
       header: () => 'Tax Id',
@@ -16,8 +16,13 @@ export function taxPaymentsTransformer(apiData) {
       cell: (column, row, index) => `${row?.tax_payment?.status}`,
     },
   ];
+
+  const rows = apiData
+  .sort((row1,row2) => row2.total_amount - row1.total_amount)
+  .slice(0,10)
+
   return {
     columns,
-    rows: apiData,
+    rows: rows,
   };
 }
