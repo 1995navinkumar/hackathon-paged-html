@@ -147,6 +147,7 @@ export default async function generateExecutiveReport() {
         displayName: "Payouts Mode",
         templates: [
           pdfChart({
+            name: 'payouts_mode',
             chartData: payouts.payoutsModeChart.chartConfig,
             height: "400px",
             width: "400px",

@@ -106,6 +106,11 @@ export const styles = `
         justify-content : center;
     }
 
+    .payouts_mode {
+        display : flex;
+        justify-content : center;
+    }
+
     .labels-legend {
         display: flex;
         flex-direction: column;
