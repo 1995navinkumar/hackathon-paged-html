@@ -1,5 +1,5 @@
 export const bladeTokens = `
- :host {
+ :root {
   --border-radius-none: 0px;
   --border-radius-small: 2px;
   --border-radius-medium: 4px;

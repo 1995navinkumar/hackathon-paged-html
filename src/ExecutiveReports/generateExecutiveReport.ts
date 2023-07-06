@@ -123,37 +123,43 @@ export default async function generateExecutiveReport() {
       }),
     ],
   });
-  const payoutsSection = Section({
+
+  console.log('plData', plData.plChart);
+
+  const payoutLinksSection = Section({
+    name: 'payoutLinks',
     newPage: true,
-    name: "Payouts",
-    displayName: "Payouts",
+    displayName: 'Payout Links',
     templates: [
+      Table({
+        ...plData.plTable,
+      }),
       Section({
-        name: "payouts_mode",
-        displayName: "Payouts Mode",
+        name: 'PayoutLinkslineChart',
+        newPage: true,
+        displayName: 'Trend for Number of Payments on each day',
         templates: [
           pdfChart({
-            chartData: payouts.payoutsModeChart.chartConfig,
-            height: 300,
-            width: 500,
+            chartData: plData.plLineChart,
+            height: "350px",
+            width: "100%",
           }),
         ],
       }),
       Section({
-        name: "payouts_ranges",
-        displayName: "Payout Ranges",
+        name: 'PayoutLinksChart',
+        displayName: 'Amount vs User for each payment',
         templates: [
           pdfChart({
-            chartData: payouts.payoutRangesChart.chartConfig,
-            height: 300,
-            width: 500,
+            chartData: plData.plChart,
+            height: "350px",
+            width: "100%",
           }),
         ],
       }),
     ],
   });
-
-  await instance.render([payoutsSection, vendorPaymentSection, TaxSection, TOC]);
+  await instance.render([vendorPaymentSection, TaxSection, payoutLinksSection, TOC]);
 
   printPage(shadow.innerHTML);
   // document.body.removeChild(el);
