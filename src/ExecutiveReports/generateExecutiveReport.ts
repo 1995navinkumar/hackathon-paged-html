@@ -68,7 +68,7 @@ export default async function generateExecutiveReport() {
     templates: [
       Section({
         name: "groupByStatus",
-        displayName: "Vendor Payments Summary",
+        displayName: "Payments Summary",
         templates: [countCard({ data: vpData.groupByStatus })],
       }),
       Section({
@@ -208,7 +208,7 @@ export default async function generateExecutiveReport() {
     TOC,
   ]);
 
-  // printPage(shadow.innerHTML);
+  printPage(shadow.innerHTML);
   // document.body.removeChild(el);
 }
 // In order to print just the report contents, we would need a new document. Hence used Iframe.
@@ -247,6 +247,7 @@ const getHtml = (htmlString) => `
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
 </head>
 <body>
     ${htmlString}

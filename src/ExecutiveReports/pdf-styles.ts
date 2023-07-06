@@ -6,6 +6,7 @@ export const styles = `
     #pdf-root, body {
         background : var(--colors-surface-background-level1-low-contrast);
         color : var(--colors-brand-gray-500-high-contrast);
+        font-family: 'Lato', sans-serif;
     }
   
 
@@ -14,7 +15,6 @@ export const styles = `
     }
 
     table {
-        font-family: Arial, Helvetica, sans-serif;
         border-collapse: collapse;
         width: 100%;
         margin-top: 24px;
@@ -35,17 +35,18 @@ export const styles = `
         padding-top: 12px;
         padding-bottom: 12px;
         text-align: left;
-        // background-color: #04aa6d;
-        // color: white;
     }
 
     .section {
         font-size: 24px;
         font-weight: bold;
-        // color: gray;
         opacity: 0.9;
         margin-top: 24px;
         margin-bottom: 4px;
+    }
+
+    .section[depth='2'] {
+        font-size : 18px;
     }
 
     .section[depth='1'] {
@@ -57,7 +58,6 @@ export const styles = `
     .toc-section {
         display: flex;
         font-size: 22px;
-        // color: gray;
         /* font-weight: bold; */
         padding: 8px 0px;
         cursor: pointer;
@@ -73,7 +73,6 @@ export const styles = `
 
     .toc-title {
         font-size: 24px;
-        // color: gray;
         font-weight: bold;
         padding: 8px 0px;
     }
@@ -99,7 +98,7 @@ export const styles = `
     .count-value {
         font-weight : bold;
         font-size : 36px;
-        color : var(--colors-feedback-background-negative-high-contrast);
+        color : #ff9f40;
     }
 
     .vp_contacts {

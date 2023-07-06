@@ -4,6 +4,7 @@ import { utils } from "paged-html";
 import { PagedComponent, PagedeComponentCreator, PagedHTMLInstance } from "paged-html/build/types";
 
 Chart.defaults.color = "hsla(229, 10%, 60%, 1)";
+Chart.defaults.font.family = `'Lato', sans-serif`;
 Chart.register(ChartDataLabels);
 Chart.defaults.set('plugins.datalabels', {
   color: '#000',
