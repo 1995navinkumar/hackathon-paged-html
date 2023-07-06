@@ -1,3 +1,5 @@
+import { colors } from "../constants";
+
 export function taxPaymentsTransformer(apiData) {
   const taxPayments = getTaxPayments(apiData)
   const taxData = getTaxData(apiData)
@@ -15,7 +17,7 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', {
 
 function getTaxPayments(data) {
   const defaultHeader = (column) => column.name;
-  let columns = [
+  const columns = [
     {
       name: 'tax_id',
       header: defaultHeader,
@@ -32,9 +34,14 @@ function getTaxPayments(data) {
       cell: (column, row, index) => `${row?.tax_payment?.status}`,
     },
   ];
+
+  const rows = data
+    .sort((row1, row2) => row2.total_amount - row1.total_amount)
+    .slice(0, 10);
+
   return {
     columns,
-    rows: data
+    rows
   };
 }
 
@@ -54,7 +61,7 @@ function getTaxData(data) {
   }, [])
 
   const groupBy = (a, k) => {
-    let reduceData = a.reduce((result, currentValue) => {
+    const reduceData = a.reduce((result, currentValue) => {
       result[currentValue[k]] = result[currentValue[k]] || [];
       result[currentValue[k]].push(
         currentValue
@@ -69,7 +76,7 @@ function getTaxData(data) {
 
   const tdsCategoryData = []
 
-  for (let i in groupedData) {
+  for (const i in groupedData) {
     let amount = 0
     for (let j = 0; j < groupedData[i].length; j++) {
       amount += groupedData[i][j].total_tax_amount
@@ -86,18 +93,39 @@ function getTaxData(data) {
       labels: tdsCategoryData.map(d => d.category),
       datasets: [
         {
+          label : 'TDS',
+          barThickness : 30,
           data: tdsCategoryData.map(d => d.total_amount),
-          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          backgroundColor: colors[1],
         },
       ],
     },
     options: {
-      responsive: true,
       plugins: {
         legend: {
-          display: false
+          display: false,
+        },
+        datalabels: {
+          anchor: 'end',
+          align: 'top',
+          color: "hsla(229, 10%, 60%, 1)",
+          font: {
+            size: '14px'
+          }
         }
       },
-    },
+      scales: {
+        x: {
+          grid: {
+            color: 'hsla(230, 23%, 29%, 1)'
+          }
+        },
+        y: {
+          grid: {
+            color: 'hsla(230, 23%, 29%, 1)'
+          }
+        }
+      }
+    }
   };
 }
