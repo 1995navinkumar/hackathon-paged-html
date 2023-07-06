@@ -120,7 +120,19 @@ export default async function generateExecutiveReport() {
       Section({
         name: "tax_summary",
         displayName: "Tax Summary",
-        templates: [Table({ ...taxData })],
+        templates: [Table({ ...taxData.taxTable })],
+      }),
+      Section({
+        name: 'TDS',
+        threshold: 500,
+        displayName: 'TDS Payments by Months',
+        templates: [
+          pdfChart({         
+            chartData: taxData.taxChart,
+            height: "350px",
+            width: "100%",
+          }),
+        ],
       }),
     ],
   });
@@ -196,7 +208,7 @@ export default async function generateExecutiveReport() {
     TOC,
   ]);
 
-  printPage(shadow.innerHTML);
+  // printPage(shadow.innerHTML);
   // document.body.removeChild(el);
 }
 // In order to print just the report contents, we would need a new document. Hence used Iframe.

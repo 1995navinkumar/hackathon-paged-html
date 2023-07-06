@@ -45,7 +45,7 @@ function getMonthVsAmount(data) {
           label: 'Vendor Payments by Months',
           barThickness : 30,
           data: sortedAmount.map((c) => Object.values(c)[0] / 100),
-          backgroundColor: colors,
+          backgroundColor: colors[2],
         },
       ],
     },
