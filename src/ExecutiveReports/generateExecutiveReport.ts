@@ -13,7 +13,7 @@ const { Table, Section, TOC } = components;
 
 export default async function generateExecutiveReport() {
   const el = utils.htmlToElement(
-    `<div id="pdf-container" style="height:1px; overflow:scroll;"> 
+    `<div id="pdf-container" style="height: 1px; overflow : scroll;"> 
 
     </div>`,
   );
@@ -81,7 +81,7 @@ export default async function generateExecutiveReport() {
         templates: [
           pdfChart({
             chartData: vpData.vpChart,
-            height: 300,
+            height: 350,
             width: 500,
           }),
         ],
@@ -124,6 +124,8 @@ function setPrint() {
 function printPage(srcDoc) {
   const hideFrame = document.createElement('iframe');
   hideFrame.onload = setPrint;
+  // hideFrame.style.height = '100vh';
+  // hideFrame.style.width = '100vw';
   hideFrame.style.position = 'fixed';
   hideFrame.style.right = '0';
   hideFrame.style.bottom = '0';
