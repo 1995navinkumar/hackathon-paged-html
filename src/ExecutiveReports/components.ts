@@ -3,7 +3,14 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 import { utils } from "paged-html";
 import { PagedComponent, PagedeComponentCreator, PagedHTMLInstance } from "paged-html/build/types";
 
+Chart.defaults.color = "hsla(229, 10%, 60%, 1)";
 Chart.register(ChartDataLabels);
+Chart.defaults.set('plugins.datalabels', {
+  color: '#000',
+  font : {
+    size : '16px'
+  }
+});
 
 export function countCard({ data = {} }) {
   return function render(pagedInstance: PagedHTMLInstance): PagedComponent {
@@ -75,7 +82,7 @@ export function pdfChart({
 
       const imageEl = utils.htmlToElement(
         `<div class='${name}'>
-            <img src=${imageUri} style="height : ${height}; width : ${width}"/>
+            <img src=${imageUri} style="height : ${height}; width : ${width}; padding-top: 12px;"/>
           </div>
         `
       );

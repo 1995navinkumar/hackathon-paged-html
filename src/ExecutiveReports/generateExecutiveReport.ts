@@ -104,7 +104,7 @@ export default async function generateExecutiveReport() {
             name: "vp_month",
             chartData: vpData.vpChart,
             threshold: 500,
-            height: "400px",
+            height: "350px",
             width: "100%",
           }),
         ],
@@ -148,8 +148,8 @@ export default async function generateExecutiveReport() {
         templates: [
           pdfChart({
             chartData: payouts.payoutsModeChart.chartConfig,
-            height: "300px",
-            width: "300px",
+            height: "400px",
+            width: "400px",
           }),
         ],
       }),

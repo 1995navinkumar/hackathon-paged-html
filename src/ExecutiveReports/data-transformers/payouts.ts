@@ -34,6 +34,7 @@ function getPayoutsModeChart(payoutsData) {
         backgroundColor: [graphColorMap.A, graphColorMap.B, graphColorMap.C, graphColorMap.D],
       },
     ],
+    radius : '40%'
   };
 
   const chartConfig = {
@@ -83,6 +84,7 @@ function getPayoutRangesChart(payoutsData) {
       {
         label: "Amount per payout",
         data: datasetData,
+        barThickness : 30,
         backgroundColor: [graphColorMap.A, graphColorMap.B, graphColorMap.C, graphColorMap.D],
       },
     ],
@@ -93,11 +95,31 @@ function getPayoutRangesChart(payoutsData) {
     data,
     options: {
       responsive: true,
-      plugins: {
-        title: {
-          display: false,
+      plugins : {
+        legend : {
+          padding : 24
         },
+        datalabels : {
+          anchor : 'end',
+          align : 'top',
+          color : 'hsla(229, 10%, 60%, 1)',
+          font : {
+            size : '14px'
+          }
+        }
       },
+      scales : {
+        x : {
+          grid : {
+            color : 'hsla(230, 23%, 29%, 1)'
+          }
+        },
+        y : {
+          grid : {
+            color : 'hsla(230, 23%, 29%, 1)'
+          }
+        }
+      }
     },
   };
 
